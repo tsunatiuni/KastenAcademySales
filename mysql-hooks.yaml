@@ -1,0 +1,25 @@
+apiVersion: cr.kanister.io/v1alpha1
+kind: Blueprint
+metadata:
+  name: mysql-hooks
+  namespace: kasten-io
+actions:
+  backupPrehook:
+    phases:
+    - func: ScaleWorkload
+      name: scaleUpFlushAndLock
+      args:
+        namespace: '{{ index .Object.metadata "namespace" | toString  }}'
+        kind: 'deployment'
+        replicas: 1
+        name: 'flush-and-lock'
+  backupPosthook:
+    phases:
+    - func: ScaleWorkload
+      name: scaleDownFlushAndLock
+      args:
+        namespace: '{{ index .Object.metadata "namespace" | toString  }}'
+        kind: 'deployment'
+        replicas: 0
+        name: 'flush-and-lock'
+

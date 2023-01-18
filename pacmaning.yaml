@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    meta.helm.sh/release-name: pacman
+    meta.helm.sh/release-namespace: pacman
+  generation: 1
+  labels:
+    app: pacman
+  name: pac-ingress
+  namespace: pacman
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          service:
+            name: pacman
+            port:
+              number: 80
+        path: /
+        pathType: ImplementationSpecific
